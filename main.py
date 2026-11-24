@@ -21,8 +21,15 @@ def main() -> None:
     assert "\n" not in text, "entry must be a single line"
     out_dir = "/output"
     os.makedirs(out_dir, exist_ok=True)
-    with open(os.path.join(out_dir, "entry.txt"), "w", encoding="utf-8") as f:
+    path = os.path.join(out_dir, "entry.txt")
+    with open(path, "w", encoding="utf-8") as f:
         f.write(text + "\n")
+    # Read it back: the gate counts characters, so prove what landed on
+    # disk is exactly the line we meant to enter, single line included.
+    with open(path, encoding="utf-8") as f:
+        written = f.read()
+    assert written == text + "\n", "entry.txt on disk differs from the entry"
+    print(written, end="")
 
 
 if __name__ == "__main__":
